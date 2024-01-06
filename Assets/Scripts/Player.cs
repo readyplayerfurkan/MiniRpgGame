@@ -5,6 +5,9 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D _rb;
     private Animator _anim;
+    private int _facingDir = 1;
+    private bool _isFacingRight = true;
+    
     
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
@@ -21,6 +24,7 @@ public class Player : MonoBehaviour
     {
         Movement();
         CheckInput();
+        FlipController();
         AnimatorControllers();
     }
 
@@ -30,6 +34,9 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
+        
+        if (Input.GetKeyDown(KeyCode.R))
+            Flip();
     }
 
     private void Movement()
@@ -40,6 +47,21 @@ public class Player : MonoBehaviour
     private void Jump()
     {
         _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
+    }
+
+    private void Flip()
+    {
+        _facingDir = _facingDir * -1;
+        _isFacingRight = !_isFacingRight;
+        transform.Rotate(0, 180, 0);
+    }
+
+    private void FlipController()
+    {
+        if (_rb.velocity.x > 0 && !_isFacingRight)
+            Flip();
+        else if (_rb.velocity.x < 0 && _isFacingRight)
+            Flip();
     }
 
     private void AnimatorControllers()

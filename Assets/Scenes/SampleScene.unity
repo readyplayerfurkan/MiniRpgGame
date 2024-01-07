@@ -580,7 +580,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 3.5
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 1f40ff4a825ac42df8bc02df36aa942e, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -621,6 +621,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 8
   jumpForce: 12
+  dashDuration: 1
+  dashSpeed: 16
+  dashTime: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8

@@ -11,13 +11,16 @@ public class Player : MonoBehaviour
     [SerializeField] private float jumpForce;
     
     private float _xInput;
+
+    [Header("Dash Info")] 
+    [SerializeField] private float dashDuration;
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashTime;
     
     [Header("Collision Info")]
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private float groundCheckDistance;
     private bool _isGrounded;
-    private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
-    private static readonly int IsMoving = Animator.StringToHash("isMoving");
 
     private void Start()
     {
@@ -32,6 +35,8 @@ public class Player : MonoBehaviour
         CheckInput();
         FlipController();
         AnimatorControllers();
+        
+        dashTime-= Time.deltaTime;
     }
 
     private void CheckInput()
@@ -40,11 +45,17 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            dashTime = dashDuration;
     }
 
     private void Movement()
     {
-        _rb.velocity = new Vector2(_xInput * moveSpeed, _rb.velocity.y);
+        if (dashTime > 0)
+            _rb.velocity = new Vector2(_xInput * dashSpeed, _rb.velocity.y);
+        else
+            _rb.velocity = new Vector2(_xInput * moveSpeed, _rb.velocity.y);
     }
 
     private void CollisionChecks()

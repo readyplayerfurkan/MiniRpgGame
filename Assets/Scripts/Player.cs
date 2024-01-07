@@ -34,9 +34,6 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
-        
-        if (Input.GetKeyDown(KeyCode.R))
-            Flip();
     }
 
     private void Movement()

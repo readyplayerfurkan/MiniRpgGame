@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private float groundCheckDistance;
     private bool _isGrounded;
+    private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
+    private static readonly int IsMoving = Animator.StringToHash("isMoving");
 
     private void Start()
     {
@@ -75,6 +77,8 @@ public class Player : MonoBehaviour
     {
         bool isMoving = _rb.velocity.x != 0;
         
+        _anim.SetFloat("yVelocity", _rb.velocity.y);
         _anim.SetBool("isMoving", isMoving);
+        _anim.SetBool("isGrounded", _isGrounded);
     }
 }

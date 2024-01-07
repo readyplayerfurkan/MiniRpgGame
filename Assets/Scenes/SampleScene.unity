@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 73927833}
   - component: {fileID: 73927832}
   - component: {fileID: 73927831}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -579,7 +579,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3.5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -619,8 +619,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d023d01ad328134c8a70f06ed10bc30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
-  jumpForce: 7
+  moveSpeed: 8
+  jumpForce: 12
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 8
+  groundCheckDistance: 1.42
 --- !u!70 &1192970215
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -667,7 +671,7 @@ GameObject:
   - component: {fileID: 1362253339}
   - component: {fileID: 1362253338}
   - component: {fileID: 1362253337}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Platform (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -793,5 +797,5 @@ SceneRoots:
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 73927833}
-  - {fileID: 1192970213}
   - {fileID: 1362253339}
+  - {fileID: 1192970213}

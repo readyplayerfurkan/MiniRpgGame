@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,11 +7,15 @@ public class Player : MonoBehaviour
     private int _facingDir = 1;
     private bool _isFacingRight = true;
     
-    
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
     
     private float _xInput;
+    
+    [Header("Collision Info")]
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private float groundCheckDistance;
+    private bool _isGrounded;
 
     private void Start()
     {
@@ -22,6 +25,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        CollisionChecks();
         Movement();
         CheckInput();
         FlipController();
@@ -41,9 +45,15 @@ public class Player : MonoBehaviour
         _rb.velocity = new Vector2(_xInput * moveSpeed, _rb.velocity.y);
     }
 
+    private void CollisionChecks()
+    {
+        _isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
+    }
+
     private void Jump()
     {
-        _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
+        if(_isGrounded)
+            _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
     }
 
     private void Flip()

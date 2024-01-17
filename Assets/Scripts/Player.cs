@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
@@ -20,8 +21,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask whatIsGround;
     private bool _isGrounded;
-
+    
     [Header("Attack Info")] 
+    [SerializeField] private float comboTime = .3f;
+    private float _comboTimeWindow;
     private bool _isAttacking;
     private int _comboCounter;
     
@@ -32,6 +35,7 @@ public class Player : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponentInChildren<Animator>();
+        _comboTimeWindow = comboTime;
     }
 
     private void Update()
@@ -44,22 +48,50 @@ public class Player : MonoBehaviour
 
         _dashCooldownTimer -= Time.deltaTime;
         _dashTime -= Time.deltaTime;
+        _comboTimeWindow -= Time.deltaTime;
     }
 
     private void CheckInput()
     {
         _xInput = Input.GetAxisRaw("Horizontal");
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            StartAttackEvent();
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift)) 
+        if (Input.GetKeyDown(KeyCode.LeftShift))
             DashAbility();
+    }
+
+    private void StartAttackEvent()
+    {
+        if (!_isGrounded)
+            return;
+        
+        if (_comboTimeWindow < 0)
+            _comboCounter = 0;
+            
+        _isAttacking = true;
+        _comboTimeWindow = comboTime;
+    }
+
+    public void AttackOver()
+    {
+        _isAttacking = false;
+
+        if (_comboCounter < 2)
+            _comboCounter++;
+        else
+            _comboCounter = 0;
     }
 
     private void DashAbility()
     {
-        if (_dashCooldownTimer > 0) return;
+        if (_dashCooldownTimer > 0 && _isAttacking) return;
 
         _dashTime = dashDuration;
         _dashCooldownTimer = dashCooldown;
@@ -67,8 +99,10 @@ public class Player : MonoBehaviour
 
     private void Movement()
     {
-        if (_dashTime > 0)
-            _rb.velocity = new Vector2(_xInput * dashSpeed, _rb.velocity.y);
+        if (_isAttacking)
+            _rb.velocity = Vector2.zero;
+        else if (_dashTime > 0)
+            _rb.velocity = new Vector2(_facingDir * dashSpeed, _rb.velocity.y);
         else
             _rb.velocity = new Vector2(_xInput * moveSpeed, _rb.velocity.y);
     }
@@ -114,5 +148,7 @@ public class Player : MonoBehaviour
         _anim.SetFloat("yVelocity", _rb.velocity.y);
         _anim.SetBool("isMoving", isMoving);
         _anim.SetBool("isGrounded", _isGrounded);
+        _anim.SetBool("isAttacking", _isAttacking);
+        _anim.SetInteger("comboCounter", _comboCounter);
     }
 }

@@ -1,13 +1,11 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
     [Header("Movement Variables")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
-    private int _facingDir = 1;
-    private bool _isFacingRight = true;
+    
     private float _xInput;
 
     [Header("Dash Info")]
@@ -16,31 +14,22 @@ public class Player : MonoBehaviour
     [SerializeField] private float dashCooldown;
     private float _dashTime;
     private float _dashCooldownTimer;
-
-    [Header("Collision Info")]
-    [SerializeField] private float groundCheckDistance;
-    [SerializeField] private LayerMask whatIsGround;
-    private bool _isGrounded;
     
     [Header("Attack Info")] 
     [SerializeField] private float comboTime = .3f;
     private float _comboTimeWindow;
     private bool _isAttacking;
     private int _comboCounter;
-    
-    private Animator _anim;
-    private Rigidbody2D _rb;
-    
-    private void Start()
+
+    protected override void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
-        _anim = GetComponentInChildren<Animator>();
-        _comboTimeWindow = comboTime;
+        base.Start();
     }
 
-    private void Update()
+    protected override void Update()
     {
-        CollisionChecks();
+        base.Update();
+        
         Movement();
         CheckInput();
         FlipController();
@@ -69,7 +58,7 @@ public class Player : MonoBehaviour
 
     private void StartAttackEvent()
     {
-        if (!_isGrounded)
+        if (!IsGrounded)
             return;
         
         if (_comboTimeWindow < 0)
@@ -100,36 +89,24 @@ public class Player : MonoBehaviour
     private void Movement()
     {
         if (_isAttacking)
-            _rb.velocity = Vector2.zero;
+            Rb.velocity = Vector2.zero;
         else if (_dashTime > 0)
-            _rb.velocity = new Vector2(_facingDir * dashSpeed, _rb.velocity.y);
+            Rb.velocity = new Vector2(FacingDir * dashSpeed, Rb.velocity.y);
         else
-            _rb.velocity = new Vector2(_xInput * moveSpeed, _rb.velocity.y);
+            Rb.velocity = new Vector2(_xInput * moveSpeed, Rb.velocity.y);
     }
-
-    private void CollisionChecks()
-    {
-        _isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
-    }
-
+    
     private void Jump()
     {
-        if (_isGrounded)
-            _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
-    }
-
-    private void Flip()
-    {
-        _facingDir = _facingDir * -1;
-        _isFacingRight = !_isFacingRight;
-        transform.Rotate(0, 180, 0);
+        if (IsGrounded)
+            Rb.velocity = new Vector2(Rb.velocity.x, jumpForce);
     }
 
     private void FlipController()
     {
-        if (_rb.velocity.x > 0 && !_isFacingRight)
+        if (Rb.velocity.x > 0 && !IsFacingRight)
             Flip();
-        else if (_rb.velocity.x < 0 && _isFacingRight)
+        else if (Rb.velocity.x < 0 && IsFacingRight)
             Flip();
         
         // switch (_rb.velocity.x)
@@ -143,12 +120,12 @@ public class Player : MonoBehaviour
 
     private void AnimatorControllers()
     {
-        bool isMoving = _rb.velocity.x != 0;
+        bool isMoving = Rb.velocity.x != 0;
 
-        _anim.SetFloat("yVelocity", _rb.velocity.y);
-        _anim.SetBool("isMoving", isMoving);
-        _anim.SetBool("isGrounded", _isGrounded);
-        _anim.SetBool("isAttacking", _isAttacking);
-        _anim.SetInteger("comboCounter", _comboCounter);
+        Anim.SetFloat("yVelocity", Rb.velocity.y);
+        Anim.SetBool("isMoving", isMoving);
+        Anim.SetBool("isGrounded", IsGrounded);
+        Anim.SetBool("isAttacking", _isAttacking);
+        Anim.SetInteger("comboCounter", _comboCounter);
     }
 }

@@ -78,9 +78,9 @@ public class Player : Entity
             _comboCounter = 0;
     }
 
-    private void DashAbility()
+    private void DashAbility() 
     {
-        if (_dashCooldownTimer > 0 && _isAttacking) return;
+        if (_dashCooldownTimer > 0 || _isAttacking) return;
 
         _dashTime = dashDuration;
         _dashCooldownTimer = dashCooldown;
@@ -91,7 +91,7 @@ public class Player : Entity
         if (_isAttacking)
             Rb.velocity = Vector2.zero;
         else if (_dashTime > 0)
-            Rb.velocity = new Vector2(FacingDir * dashSpeed, Rb.velocity.y);
+            Rb.velocity = new Vector2(_xInput * dashSpeed, Rb.velocity.y);
         else
             Rb.velocity = new Vector2(_xInput * moveSpeed, Rb.velocity.y);
     }

@@ -18,13 +18,7 @@ public class Player : Entity
     [Header("Attack Info")] 
     [SerializeField] private float comboTime = .3f;
     private float _comboTimeWindow;
-    private bool _isAttacking;
     private int _comboCounter;
-
-    protected override void Start()
-    {
-        base.Start();
-    }
 
     protected override void Update()
     {
@@ -64,13 +58,13 @@ public class Player : Entity
         if (_comboTimeWindow < 0)
             _comboCounter = 0;
             
-        _isAttacking = true;
+        IsAttacking = true;
         _comboTimeWindow = comboTime;
     }
 
     public void AttackOver()
     {
-        _isAttacking = false;
+        IsAttacking = false;
 
         if (_comboCounter < 2)
             _comboCounter++;
@@ -80,7 +74,7 @@ public class Player : Entity
 
     private void DashAbility() 
     {
-        if (_dashCooldownTimer > 0 || _isAttacking) return;
+        if (_dashCooldownTimer > 0 || IsAttacking) return;
 
         _dashTime = dashDuration;
         _dashCooldownTimer = dashCooldown;
@@ -88,7 +82,7 @@ public class Player : Entity
 
     private void Movement()
     {
-        if (_isAttacking)
+        if (IsAttacking)
             Rb.velocity = Vector2.zero;
         else if (_dashTime > 0)
             Rb.velocity = new Vector2(_xInput * dashSpeed, Rb.velocity.y);
@@ -125,7 +119,7 @@ public class Player : Entity
         Anim.SetFloat("yVelocity", Rb.velocity.y);
         Anim.SetBool("isMoving", isMoving);
         Anim.SetBool("isGrounded", IsGrounded);
-        Anim.SetBool("isAttacking", _isAttacking);
+        Anim.SetBool("isAttacking", IsAttacking);
         Anim.SetInteger("comboCounter", _comboCounter);
     }
 }

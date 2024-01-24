@@ -23,5 +23,8 @@ public class Player : MonoBehaviour
     private void Update()
     {
         StateMachine.CurrentState.Update();
+        
+        if(Input.GetKeyDown(KeyCode.A))
+            StateMachine.ChangeState(MoveState);
     }
 }

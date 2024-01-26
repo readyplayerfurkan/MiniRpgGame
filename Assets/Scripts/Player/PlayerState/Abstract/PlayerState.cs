@@ -6,7 +6,7 @@ public class PlayerState
     protected Player Player;
     protected Rigidbody2D PlayerRb;
     protected float XInput;
-
+    
     private string _animBoolName;
 
     public PlayerState(Player player, PlayerStateMachine playerStateMachine, string animBoolName)
@@ -18,7 +18,6 @@ public class PlayerState
 
     public virtual void EnterState()
     {
-        Debug.Log(Player.Anim == null);
         Player.Anim.SetBool(_animBoolName, true);
         Debug.Log("I enter " + _animBoolName);
         PlayerRb = Player.PlayerRb;
@@ -27,6 +26,7 @@ public class PlayerState
     public virtual void Update()
     {
         XInput = Input.GetAxis("Horizontal");
+        Player.Anim.SetFloat("yVelocity", PlayerRb.velocity.y);
         Debug.Log("I am in " + _animBoolName);
     }
 

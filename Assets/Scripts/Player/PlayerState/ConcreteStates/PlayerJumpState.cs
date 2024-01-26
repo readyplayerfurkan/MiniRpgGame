@@ -10,7 +10,7 @@ public class PlayerJumpState : PlayerAirState
     {
         base.EnterState();
 
-        PlayerRb.velocity = new Vector2(PlayerRb.excludeLayers, 12);
+        PlayerRb.velocity = new Vector2(PlayerRb.velocity.x, Player.jumpForce);
     }
 
     public override void Update()

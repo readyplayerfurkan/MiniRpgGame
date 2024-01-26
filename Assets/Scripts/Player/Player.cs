@@ -4,6 +4,7 @@ public class Player : MonoBehaviour
 {
     [Header("Move Info")] 
     public float playerSpeed;
+    public float jumpForce;
     
     #region Components
 
@@ -46,7 +47,5 @@ public class Player : MonoBehaviour
     }
 
     public void SetVelocity(float xVelocity, float yVelocity)
-    {
-        PlayerRb.velocity = new Vector2(xVelocity, yVelocity);
-    }
+     => PlayerRb.velocity = new Vector2(xVelocity, yVelocity);
 }

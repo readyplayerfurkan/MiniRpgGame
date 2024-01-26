@@ -14,7 +14,7 @@ public class PlayerAirState : PlayerState
     public override void Update()
     {
         base.Update();
-        
+
         if (Player.PlayerRb.velocity.y == 0)
             Player.StateMachine.ChangeState(Player.IdleState);
     }

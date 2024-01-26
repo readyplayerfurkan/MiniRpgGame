@@ -4,6 +4,8 @@ public class PlayerState
 {
     protected PlayerStateMachine PlayerStateMachine;
     protected Player Player;
+    protected Rigidbody2D PlayerRb;
+    protected float XInput;
 
     private string _animBoolName;
 
@@ -16,16 +18,21 @@ public class PlayerState
 
     public virtual void EnterState()
     {
+        Debug.Log(Player.Anim == null);
+        Player.Anim.SetBool(_animBoolName, true);
         Debug.Log("I enter " + _animBoolName);
+        PlayerRb = Player.PlayerRb;
     }
 
     public virtual void Update()
     {
+        XInput = Input.GetAxis("Horizontal");
         Debug.Log("I am in " + _animBoolName);
     }
 
     public virtual void ExitState()
     {
+        Player.Anim.SetBool(_animBoolName, false);
         Debug.Log("I exit " + _animBoolName);
     }
 }

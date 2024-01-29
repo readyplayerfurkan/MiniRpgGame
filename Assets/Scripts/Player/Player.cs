@@ -5,6 +5,16 @@ public class Player : MonoBehaviour
     [Header("Move Info")] 
     public float playerSpeed;
     public float jumpForce;
+
+    [Header("Collision Info")] 
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private float wallCheckDistance;
+    [SerializeField] private LayerMask whatIsGround;
+
+    public int FacinDir { get; private set; } = 1;
+    private bool _facingRight = true;
     
     #region Components
 
@@ -47,5 +57,33 @@ public class Player : MonoBehaviour
     }
 
     public void SetVelocity(float xVelocity, float yVelocity)
-     => PlayerRb.velocity = new Vector2(xVelocity, yVelocity);
+    {
+        PlayerRb.velocity = new Vector2(xVelocity, yVelocity);
+        FlipController(xVelocity);
+    }
+
+    public bool IsGroundDetected()
+    => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+    
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
+    }
+
+    public void Flip()
+    {
+        FacinDir *= -1;
+        _facingRight = !_facingRight;
+        transform.Rotate(0, 180, 0);
+    }
+
+    public void FlipController(float xVelocity)
+    {
+        if (xVelocity > 0 && !_facingRight)
+            Flip();
+        else if (xVelocity < 0 && _facingRight)
+            Flip();
+    }
 }

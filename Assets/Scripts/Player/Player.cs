@@ -4,6 +4,8 @@ public class Player : MonoBehaviour
 {
     [Header("Move Info")] 
     public float playerSpeed;
+    public float dashSpeed;
+    public float dashDuration;
     public float jumpForce;
 
     [Header("Collision Info")] 
@@ -15,7 +17,7 @@ public class Player : MonoBehaviour
 
     public int FacinDir { get; private set; } = 1;
     private bool _facingRight = true;
-    
+
     #region Components
 
     public Animator Anim { get; private set; }
@@ -30,6 +32,7 @@ public class Player : MonoBehaviour
     public PlayerMoveState MoveState { get; private set; }
     public PlayerJumpState JumpState { get; private set; }
     public PlayerAirState AirState { get; private set; }
+    public PlayerDashState DashState { get; private set; }
 
     #endregion
     
@@ -41,6 +44,7 @@ public class Player : MonoBehaviour
         MoveState = new PlayerMoveState(this, StateMachine, "Move");
         JumpState = new PlayerJumpState(this, StateMachine, "Jump");
         AirState = new PlayerAirState(this, StateMachine, "Jump");
+        DashState = new PlayerDashState(this, StateMachine, "Dash");
     }
 
     private void Start()

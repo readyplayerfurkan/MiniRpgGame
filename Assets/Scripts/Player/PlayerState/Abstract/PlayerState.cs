@@ -26,7 +26,7 @@ public class PlayerState
 
     public virtual void Update()
     {
-        XInput = Input.GetAxis("Horizontal");
+        XInput = Input.GetAxisRaw("Horizontal");
         StateTimer -= Time.deltaTime;
         Player.Anim.SetFloat("yVelocity", PlayerRb.velocity.y);
         Debug.Log("I am in " + _animBoolName);

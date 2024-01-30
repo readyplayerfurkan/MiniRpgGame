@@ -440,7 +440,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7686893594a2594b85bbd75497071b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 6
+  playerSpeed: 8
+  dashSpeed: 25
+  dashDuration: 0.25
   jumpForce: 5
   groundCheck: {fileID: 253900901}
   groundCheckDistance: 1.5

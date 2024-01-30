@@ -17,7 +17,7 @@ public class PlayerMoveState : PlayerGroundedState
         Player.SetVelocity(XInput * Player.playerSpeed, PlayerRb.velocity.y);
         
         if (XInput == 0)
-            PlayerStateMachine.ChangeState(Player.IdleState);     
+            PlayerStateMachine.ChangeState(Player.IdleState); 
     }
 
     public override void ExitState()

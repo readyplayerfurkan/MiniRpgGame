@@ -3,10 +3,15 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [Header("Move Info")] 
-    public float playerSpeed;
+    public float playerSpeed; 
+    public float jumpForce;
+
+    [Header("Dash Info")] 
+    [SerializeField] private float dashCooldown;
+    private float dashUsageTimer;
     public float dashSpeed;
     public float dashDuration;
-    public float jumpForce;
+    public float dashDir { get; private set; }
 
     [Header("Collision Info")] 
     [SerializeField] private Transform groundCheck;
@@ -58,6 +63,23 @@ public class Player : MonoBehaviour
     private void Update()
     {
         StateMachine.CurrentState.Update();
+        CheckForDashInput();
+    }
+
+    private void CheckForDashInput()
+    {
+        dashUsageTimer -= Time.deltaTime;
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashUsageTimer < 0)
+        {
+            dashUsageTimer = dashCooldown;
+            dashDir = Input.GetAxisRaw("Horizontal");
+
+            if (dashDir == 0)
+                dashDir = FacinDir;
+            
+            StateMachine.ChangeState(DashState);
+        }
     }
 
     public void SetVelocity(float xVelocity, float yVelocity)
